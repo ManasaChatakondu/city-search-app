@@ -1,10 +1,11 @@
 import axios from 'axios';
 
+const {REACT_APP_RAPIDAPI_URL, REACT_APP_RAPIDAPI_KEY, REACT_APP_RAPIDAPI_HOST} = process.env;
 const axiosInstance = axios.create({
-    baseURL:'https://wft-geo-db.p.rapidapi.com',
+    baseURL:`${REACT_APP_RAPIDAPI_URL}`,
     headers:{
-        'X-RapidAPI-Key': 'cd938bca04msh814d4ed269045bep142a6fjsna65507731bfc',
-        'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com'
+        'X-RapidAPI-Key': `${REACT_APP_RAPIDAPI_KEY}`,
+        'X-RapidAPI-Host': `${REACT_APP_RAPIDAPI_HOST}`,
     }
 });
 

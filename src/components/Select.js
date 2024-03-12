@@ -37,6 +37,7 @@ function SearchForm({ data, type, handleChange, name }) {
                 }
                 getOptionLabel={(option) => option.name}
                 value={name ? data.find(option => option.name === name) : null}
+                //isOptionEqualToValue =
             />
         </>
     );
