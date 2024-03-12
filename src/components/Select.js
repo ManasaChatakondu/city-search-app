@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Autocomplete  from "@mui/material/Autocomplete";
@@ -12,10 +12,12 @@ function SearchForm({data,type,handleChange}){
                 sx={{width:300}}
                 options={data}
                 onChange={(_,value) => handleChange(type,value?.code)}
+                clearOnBlur
+                isOptionEqualToValue={(option, value) => option.value === value}
                 autoHighlight
                 getOptionLabel={(option) => option.name}
                 renderOption={(props,option)=>(
-                    <Box component="li" sx={{mr:2, flexShrink:0}} {...props}>
+                    <Box component="li" sx={{"& > img": {mr:2, flexShrink:0}}} {...props}>
                         {type ==="country" && (
                             <img
                             loading="lazy"
@@ -29,8 +31,13 @@ function SearchForm({data,type,handleChange}){
                     </Box>
                 )}
 
-                renderInput={(params)=><TextField {...params} label={`choose a ${type}`} />}
-
+                renderInput={(params)=>
+                    <TextField {...params} label={`Choose a ${type}`} inputProps={{
+                        ...params.inputProps,
+                        autoComplete: "",
+                    }}
+                    />
+                }
             />
         </>
     );
