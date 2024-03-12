@@ -4,10 +4,11 @@ import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import axios from "./config/axiosconfig";
 import SelectDropdown from "./components/Select";
-import { countries } from "./constants/countries";
+//import { countries } from "./constants/countries";
+
 function App() {
 
-  //const [countries,setCountries] = useState([]);
+  const [countries, setCountries] = useState([]);
   const [cities, setCities] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [selectedCountryName, setSelectedCountryName] = useState(null);
@@ -28,14 +29,18 @@ function App() {
       params: { limit: 10 },
     };
 
-    try {
-      axios.request(options).then((response) => setCities(response.data.data));
-      setError(null);
-    } catch (error) {
-      setCities([]);
-      setError("Error fetching Cities. Please try again later.");
+    const fetchCities = async () => {
+      try {
+        await axios.request(options).then((response) => setCities(response.data.data));
+        setError(null);
+      } catch (error) {
+        setCities([]);
+        setError("Error fetching Cities. Please try again later.");
+      }
     }
+    fetchCities();
   }, [selectedRegion, selectedCountry]);
+
 
   useEffect(() => {
     if (!selectedCountry) return;
@@ -45,31 +50,37 @@ function App() {
       params: { limit: 10 },
     };
 
-    try {
-      axios.request(options).then((response) => setRegions(response.data.data));
-      setError(null);
-    } catch (error) {
-      setRegions([]);
-      setError("Error fetching regions. Please try again later.");
+    const fetchRegions = async () => {
+      try {
+        await axios.request(options).then((response) => setRegions(response.data.data));
+        setError(null);
+      } catch (error) {
+        setRegions([]);
+        setError("Error fetching regions. Please try again later.");
+      }
     }
+    fetchRegions();
   }, [selectedCountry]);
 
 
-  // useEffect(()=>{
+  useEffect(() => {
 
-  //   const options={
-  //     method: "GET",
-  //     url: 'v1/geo/countries',
-  //     params:{limit:10}
-  //   }
+    const options = {
+      method: "GET",
+      url: `v1/geo/countries`,
+      params: { limit: 10 }
+    }
 
-  //   try{
-  //     axios.request(options).then((response)=>setCountries(response));
-  //   }catch(error){
-  //     setError(error);
-  //   }
+    const fetchCountries = async () => {
+      try {
+        await axios.request(options).then((response) => setCountries(response.data.data));
+      } catch (error) {
+        setError("Error fetching countries.Please try again later.");
+      }
+    }
+    fetchCountries();
+  }, []);
 
-  // },[]);
   const regionsData =
     regions?.map(({ isoCode, name }) => ({
       code: isoCode,
