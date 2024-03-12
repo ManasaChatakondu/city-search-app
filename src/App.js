@@ -8,11 +8,14 @@ import { countries } from "./constants/countries";
 function App() {
 
   //const [countries,setCountries] = useState([]);
-  const [cities,setCities] = useState([]);
+  const [cities, setCities] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState(null);
+  const [selectedCountryName, setSelectedCountryName] = useState(null);
   const [regions, setRegions] = useState([]);
   const [selectedcity, setSelectedCity] = useState(null);
+  const [selectedcityName, setSelectedCityName] = useState(null);
   const [selectedRegion, setSelectedRegion] = useState(null);
+  const [selectedRegionName, setSelectedRegionName] = useState(null);
   const [error, setError] = useState(null);
 
 
@@ -68,62 +71,77 @@ function App() {
 
   // },[]);
   const regionsData =
-  regions?.map(({ isoCode, name }) => ({
-    code: isoCode,
-    name,
-  })) || [];
+    regions?.map(({ isoCode, name }) => ({
+      code: isoCode,
+      name,
+    })) || [];
 
   const citiesData =
-  cities?.map(({ city, name }) => ({
-    code: city,
-    name,
-  })) || [];
+    cities?.map(({ city, name }) => ({
+      code: city,
+      name,
+    })) || [];
 
-  const handleChange = (type,data)=>{
-    if(type === "country"){
-      setSelectedCountry(data);
-      setSelectedRegion(null);
-      setSelectedCity(null);
-      setRegions([]);
-      setCities([]);
+  const resetRegionFilter = () => {
+    setSelectedRegionName(null);
+    setSelectedRegion(null);
+    setRegions([]);
+  };
+
+  const resetCityFilter = () => {
+    setSelectedCityName(null);
+    setSelectedCity(null);
+    setCities([]);
+  };
+
+  const handleChange = (type, code, name) => {
+    if (type === "country") {
+      setSelectedCountry(code);
+      setSelectedCountryName(name);
+      resetRegionFilter();
+      resetCityFilter();
     }
     if (type === "region") {
-      setSelectedRegion(data);
-      setSelectedCity(null);
-      setCities([]);
+      setSelectedRegion(code);
+      setSelectedRegionName(name);
+      resetCityFilter();
     }
     if (type === "city") {
-      setSelectedCity(data);
+      setSelectedCity(code);
+      setSelectedCityName(name);
     }
   }
 
   return (
     <Box display="flex" justifyContent="center">
       <Stack mt={2}>
-      <h1>City Search App</h1>
-      <h4>Countries</h4>
+        <h1>City Search App</h1>
+        <h4>Countries</h4>
 
-      <SelectDropdown 
-        data={countries}
-        type="country"
-        handleChange={handleChange}
-      />
+        <SelectDropdown
+          data={countries}
+          type="country"
+          handleChange={handleChange}
+          name={selectedCountryName}
+        />
 
-      <h4>Regions</h4>
+        <h4>Regions</h4>
         <SelectDropdown
           data={regionsData}
           type="region"
           handleChange={handleChange}
+          name={selectedRegionName}
         />
 
-      <h4>Cities</h4>
+        <h4>Cities</h4>
         <SelectDropdown
           data={citiesData}
           handleChange={handleChange}
           type="city"
+          name={selectedcityName}
         />
 
-        {selectedcity && <h5>City that selected : {selectedcity}</h5>}
+        {selectedcity && <h5>Selected City : {selectedcity}</h5>}
       </Stack>
       {error && <p>{error}</p>}
     </Box>
